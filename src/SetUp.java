@@ -13,12 +13,6 @@ public class SetUp {
     static JButton delPass = new JButton("Delete password");
     static JButton genPass = new JButton("Generate password");
     static JButton testPass = new JButton("Test password");
-    public static JButton getAddPass() {return addPass;}
-    public static JButton getEditPass() {return editPass;}
-    public static JButton getDelPass() {return delPass;}
-    public static JButton getGenPass() {return genPass;}
-    public static JButton getTestPass() {return testPass;}
-
 
 
     public static void creatingWindow() {
@@ -63,6 +57,7 @@ public class SetUp {
 
 
         buttonsConstraints.gridy = 0;
+        ButtonFuncs.addAct();
         buttonsLayout.add(addPass, buttonsConstraints);
         buttonsConstraints.gridy = 1;
         buttonsLayout.add(editPass, buttonsConstraints);
