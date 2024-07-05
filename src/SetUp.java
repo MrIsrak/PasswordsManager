@@ -1,11 +1,5 @@
-import com.sun.nio.sctp.PeerAddressChangeNotification;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.NoRouteToHostException;
-import java.util.Locale;
 
 public class SetUp {
     static JButton addPass = new JButton("Add password");
@@ -16,7 +10,8 @@ public class SetUp {
 
 
     public static void creatingWindow() {
-        JFrame window = new JFrame("GUI Screen");
+       JFrame window = new JFrame("Main menu");
+
         window.setSize(300, 400);
         window.setLocationRelativeTo(null);
 
@@ -59,12 +54,16 @@ public class SetUp {
         buttonsConstraints.gridy = 0;
         ButtonFuncs.addAct();
         buttonsLayout.add(addPass, buttonsConstraints);
+        ButtonFuncs.editAct();
         buttonsConstraints.gridy = 1;
         buttonsLayout.add(editPass, buttonsConstraints);
+        ButtonFuncs.deleteAct();
         buttonsConstraints.gridy = 2;
         buttonsLayout.add(delPass, buttonsConstraints);
+        ButtonFuncs.genAct();
         buttonsConstraints.gridy = 3;
         buttonsLayout.add(genPass, buttonsConstraints);
+        ButtonFuncs.testAct();
         buttonsConstraints.gridy = 4;
         buttonsLayout.add(testPass, buttonsConstraints);
 
