@@ -1,11 +1,30 @@
+import com.sun.nio.sctp.PeerAddressChangeNotification;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.NoRouteToHostException;
+import java.util.Locale;
 
 public class SetUp {
-    public static void creatingWindow(JFrame window){
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    static JButton addPass = new JButton("Add password");
+    static JButton editPass = new JButton("Edit password");
+    static JButton delPass = new JButton("Delete password");
+    static JButton genPass = new JButton("Generate password");
+    static JButton testPass = new JButton("Test password");
+    public static JButton getAddPass() {return addPass;}
+    public static JButton getEditPass() {return editPass;}
+    public static JButton getDelPass() {return delPass;}
+    public static JButton getGenPass() {return genPass;}
+    public static JButton getTestPass() {return testPass;}
+
+
+
+    public static void creatingWindow() {
+        JFrame window = new JFrame("GUI Screen");
         window.setSize(300, 400);
+        window.setLocationRelativeTo(null);
 
         // Main layout
         JPanel mainLayout = new JPanel(new GridBagLayout());
@@ -37,21 +56,27 @@ public class SetUp {
         GridBagConstraints buttonsConstraints = new GridBagConstraints();
 
         buttonsConstraints.insets = new Insets(2, 0, 2, 0);
-        buttonsConstraints.gridwidth = 100;
-        buttonsConstraints.ipadx = 100;
+        buttonsConstraints.gridwidth = 2;
+        buttonsConstraints.fill = GridBagConstraints.HORIZONTAL;
         buttonsConstraints.ipady = 20;
         buttonsConstraints.anchor = GridBagConstraints.CENTER;
 
-        // Buttons
-        for(int i=1; i<6; i++){
-            JButton button = new JButton("Button " + i);
-            buttonsConstraints.gridx = 0;
-            buttonsConstraints.gridy = i;
 
-            buttonsLayout.add(button, buttonsConstraints);
-        }
+        buttonsConstraints.gridy = 0;
+        buttonsLayout.add(addPass, buttonsConstraints);
+        buttonsConstraints.gridy = 1;
+        buttonsLayout.add(editPass, buttonsConstraints);
+        buttonsConstraints.gridy = 2;
+        buttonsLayout.add(delPass, buttonsConstraints);
+        buttonsConstraints.gridy = 3;
+        buttonsLayout.add(genPass, buttonsConstraints);
+        buttonsConstraints.gridy = 4;
+        buttonsLayout.add(testPass, buttonsConstraints);
+
         mainConstraints.gridy = 1;
         mainLayout.add(buttonsLayout, mainConstraints);
+
+
 
         window.add(mainLayout);
         window.setVisible(true);
