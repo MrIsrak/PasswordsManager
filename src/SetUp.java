@@ -44,7 +44,8 @@ public class SetUp {
         JPanel buttonsLayout = new JPanel(new GridBagLayout());
         GridBagConstraints buttonsConstraints = new GridBagConstraints();
 
-        buttonsConstraints.insets = new Insets(2, 0, 2, 0);
+        buttonsConstraints.insets = new Insets(5, 0, 5, 0);
+        mainConstraints.insets = new Insets(5, 0, 5, 0);
         buttonsConstraints.gridwidth = 2;
         buttonsConstraints.fill = GridBagConstraints.HORIZONTAL;
         buttonsConstraints.ipady = 20;
