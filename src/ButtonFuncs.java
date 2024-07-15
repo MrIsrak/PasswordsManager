@@ -1,10 +1,5 @@
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.swing.*;
 import java.awt.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 public class ButtonFuncs extends Initialization{
     public static void addAct() {
         SetUp.addPass.addActionListener(e -> {
@@ -25,29 +20,10 @@ public class ButtonFuncs extends Initialization{
             Initialization.saveButtonPlace();
 
             save.addActionListener(e1 -> {
-                SecretKey secretKey;
-                IvParameterSpec ivParameterSpec;
-                byte[] encrypt, decrypt;
-                String allData = sitePassField.getText() + ";" + emailPassField.getText() + ";" + new String(passwordField.getPassword());
                 try {
-                    secretKey = EncryptDecrypt.generateKey();
-                    ivParameterSpec = EncryptDecrypt.generateIv();
-                    encrypt = EncryptDecrypt.encrypt(allData, secretKey, ivParameterSpec);
-                    String fileName = new String((sitePassField.getText() + ";" + emailPassField.getText()).getBytes(), StandardCharsets.UTF_8);
-                    FileFuncs.writeFile(encrypt, fileName);
-                    System.out.println(Arrays.toString(encrypt));
-
-                    byte[] fileData = FileFuncs.readFile(fileName);
-                    decrypt = EncryptDecrypt.decrypt(fileData, secretKey, ivParameterSpec);
-                    String decryptedData = new String(decrypt, StandardCharsets.UTF_8);
-                    String[] parts = decryptedData.split(";");
-                    System.out.println("Site: " + parts[0]);
-                    System.out.println("Email: " + parts[1]);
-                    System.out.println("Password: " + parts[2]);
-
-                } catch (Exception ex) {
-                    System.err.println("Error during encryption/decryption: " + ex.getMessage());
-                }
+                    FileFuncs.checkFile();
+                    FileFuncs.writeFile(passwordField.getText(), emailPassField.getText(), sitePassField.getText());
+                } catch (Exception ex) {System.err.println("Error during encryption/decryption: " + ex.getMessage());}
             });
             mainLayout.add(buttonsLayout, mainConstraints);
             addPassWindow.add(mainLayout);

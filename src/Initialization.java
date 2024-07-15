@@ -1,20 +1,29 @@
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.swing.*;
 import java.awt.*;
+import java.security.NoSuchAlgorithmException;
 
 public class Initialization {
     static JPanel mainLayout = new JPanel(new GridBagLayout());
     static GridBagConstraints mainConstraints = new GridBagConstraints();
-
     static JPanel headlineLayout = new JPanel(new GridBagLayout());
     static GridBagConstraints headerConstraints = new GridBagConstraints();
     static JLabel headlineLabel = new JLabel();
-
     static JPanel buttonsLayout = new JPanel(new GridBagLayout());
     static GridBagConstraints buttonsConstraints = new GridBagConstraints();
-
     static JButton save = new JButton("Save");
+    static final String filePath = "C:\\Users\\evgen\\IdeaProjects\\PasswordsManager\\passwords.json";
+    static final SecretKey secretKey;
+    static {
+        try {
+            secretKey = EncryptDecrypt.generateKey();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-
+    static final IvParameterSpec ivParameterSpec = EncryptDecrypt.generateIv();
     public static void addText(String text){
         headlineLabel.setText(text);
         headlineLabel.setFont(new Font("CALIBRE", Font.BOLD, 16));
