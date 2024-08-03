@@ -11,7 +11,6 @@ public class SingletonFrame extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                // Reset the instance to null when the window is closed
                 instance = null;
             }
         });
@@ -27,7 +26,13 @@ public class SingletonFrame extends JFrame{
         }
         return instance;
     }
-//    public JFrame getFrame() {
-//        return frame;
-//    }
+    public void resetContent() {
+//        getContentPane().removeAll();
+//        revalidate();
+//        repaint();
+        Initialization.headlineLayout.removeAll();
+        Initialization.buttonsLayout.removeAll();
+//        Initialization.mainLayout.remove(Initialization.save);
+    }
+
 }
