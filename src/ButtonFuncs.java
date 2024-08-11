@@ -52,7 +52,7 @@ public class ButtonFuncs extends Initialization{
                 try{
                     FileFuncs.checkFile();
                     FileFuncs.readFile(emailPassField.getText(), sitePassField.getText());
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
             });

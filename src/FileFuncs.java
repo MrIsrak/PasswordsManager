@@ -70,18 +70,35 @@ public class FileFuncs {
     }
 
 
-    public static String readFile(String email, String site) throws IOException {
+    public static byte[] readFile(String email, String site) throws Exception {
         loadData(email);
-        String resPass = "";
-        if (Initialization.inventoryData.has(email)) {
-            for (int i = 0; i < Initialization.sites.length(); i++) {
-                if (Initialization.sites.getJSONObject(i).getString("siteName").equals(site)) {
-                    resPass = Initialization.sites.getJSONObject(i).getString("password");
-                    System.out.println(resPass);
-                    break;
+        byte[] resPass = {};
+        if (Initialization.inventoryData != null && Initialization.inventoryData.has(email)) {
+            // Retrieve the user's data associated with the email
+            JSONArray sites = Initialization.userData.optJSONArray("sites");
+//            System.out.println(sites);
+            // Check if the sites array is not null
+            if (sites != null) {
+                for (int i = 0; i < sites.length(); i++) {
+                    JSONObject siteData = sites.getJSONObject(i);
+                    // Match the site name
+                    Object passwordObj = siteData.get("password");
+                    if (passwordObj instanceof JSONObject) {
+                        byte[] passwordBytes = jsonObjectToByteArray((JSONObject) passwordObj);
+                        resPass = EncryptDecrypt.decrypt(passwordBytes, Initialization.secretKey, Initialization.ivParameterSpec);
+                    } else if (passwordObj instanceof JSONArray) {
+                        // Handle case where password is incorrectly stored as an array
+                        // Log an error or fix the structure here
+                        System.out.println("Error: Password is stored as JSONArray, not JSONObject");
+                    } else {
+                        System.out.println("Error: Unexpected data type for password");
+                    }
                 }
             }
+        } else {
+            System.out.println("User data or email not found.");
         }
+
         return resPass;
     }
     private static String loadJsonData(String filename) throws IOException {
@@ -111,5 +128,12 @@ public class FileFuncs {
         // Attempt to retrieve user data associated with the given email from the inventory.
         Initialization.userData = Initialization.inventoryData.optJSONObject(email);
 
+    }
+    public static byte[] jsonObjectToByteArray(JSONObject jsonObject) {
+        // Step 1: Convert JSONObject to String
+        String jsonString = jsonObject.toString();
+
+        // Step 2: Convert the String to byte[] using UTF-8 encoding
+        return jsonString.getBytes(StandardCharsets.UTF_8);
     }
 }
