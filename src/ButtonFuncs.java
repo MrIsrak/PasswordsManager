@@ -1,13 +1,12 @@
-import javax.management.InstanceNotFoundException;
 import javax.swing.*;
-import java.awt.*;
+import java.io.IOException;
+
 public class ButtonFuncs extends Initialization{
+    //TODO fix save button removing
     public static void addAct() {
-        SetUp.addPass.addActionListener(e -> {
+        MainWindowSetUp.addPass.addActionListener(e -> {
             SingletonFrame addPassWindow = SingletonFrame.getInstance();
-            addPassWindow.resetContent();
-            buttonsConstraints.insets = new Insets(2, 0, 2, 0);
-            buttonsConstraints.fill = GridBagConstraints.HORIZONTAL;
+            Initialization.setUp(addPassWindow);
             String text = "Add password";
             addPassWindow.setTitle(text);
             Initialization.addText(text);
@@ -17,10 +16,12 @@ public class ButtonFuncs extends Initialization{
             JTextField emailPassField = new JTextField(10);
             JPasswordField passwordField = new JPasswordField(10);
 
-            Initialization.addLabelTextSiteField("Site: ", sitePassField, buttonsConstraints);
-            Initialization.addLabelTextEmailField("Email: ", emailPassField, buttonsConstraints);
-            Initialization.addLabelPasswordField("Pass: ", passwordField, buttonsConstraints);
-            Initialization.saveButtonPlace();
+            Initialization.addLabelTextSiteField("Site: ", sitePassField, buttonsConstraints, 0, 1);
+            Initialization.addLabelTextSiteField("Email: ", emailPassField, buttonsConstraints, 0, 2);
+            Initialization.addLabelPasswordField("Pass: ", passwordField, buttonsConstraints, 0, 3);
+            Initialization.placeButton(save);
+
+
             save.addActionListener(e1 -> {
                 try {
                     FileFuncs.checkFile();
@@ -31,10 +32,41 @@ public class ButtonFuncs extends Initialization{
             addPassWindow.add(mainLayout);
         });
     }
+    public static void getAct() {
+        MainWindowSetUp.getPass.addActionListener(e -> {
+            SingletonFrame genPassWindow = SingletonFrame.getInstance();
+            Initialization.setUp(genPassWindow);
+            Initialization.removeButton(save);
+            String text = "Get password";
+            genPassWindow.setTitle(text);
+            Initialization.addText(text);
+
+            JTextField sitePassField = new JTextField(10);
+            JTextField emailPassField = new JTextField(10);
+
+            Initialization.addLabelTextSiteField("Email: ", emailPassField, buttonsConstraints, 0, 1);
+            Initialization.addLabelTextSiteField("Site: ", sitePassField, buttonsConstraints, 0, 2);
+            Initialization.placeButton(get);
+
+            get.addActionListener(e1 -> {
+                try{
+                    FileFuncs.checkFile();
+                    FileFuncs.readFile(emailPassField.getText(), sitePassField.getText());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+
+            mainConstraints.gridy=2;
+            mainLayout.add(buttonsLayout, mainConstraints);
+            genPassWindow.add(mainLayout);
+        });
+    }
     public static void editAct() {
-        SetUp.editPass.addActionListener(e -> {
+        MainWindowSetUp.editPass.addActionListener(e -> {
             SingletonFrame editPassWindow = SingletonFrame.getInstance();
             editPassWindow.resetContent();
+            mainLayout.remove(save);
             String text = "Edit password";
             editPassWindow.setTitle(text);
             Initialization.addText(text);
@@ -42,7 +74,7 @@ public class ButtonFuncs extends Initialization{
         });
     }
     public static void deleteAct() {
-        SetUp.delPass.addActionListener(e -> {
+        MainWindowSetUp.delPass.addActionListener(e -> {
             SingletonFrame delPassWindow = SingletonFrame.getInstance();
             delPassWindow.resetContent();
             String text = "Delete password";
@@ -51,18 +83,8 @@ public class ButtonFuncs extends Initialization{
             delPassWindow.add(mainLayout);
         });
     }
-    public static void genAct() {
-        SetUp.genPass.addActionListener(e -> {
-            SingletonFrame genPassWindow = SingletonFrame.getInstance();
-            genPassWindow.resetContent();
-            String text = "Generate password";
-            genPassWindow.setTitle(text);
-            Initialization.addText(text);
-            genPassWindow.add(mainLayout);
-        });
-    }
     public static void testAct() {
-        SetUp.testPass.addActionListener(e -> {
+        MainWindowSetUp.testPass.addActionListener(e -> {
             SingletonFrame testPassWindow = SingletonFrame.getInstance();
             testPassWindow.resetContent();
             String text = "Test password";

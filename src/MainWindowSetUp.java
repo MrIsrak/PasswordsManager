@@ -1,11 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class SetUp {
+public class MainWindowSetUp {
     static JButton addPass = new JButton("Add password");
     static JButton editPass = new JButton("Edit password");
     static JButton delPass = new JButton("Delete password");
-    static JButton genPass = new JButton("Generate password");
+    static JButton getPass = new JButton("Get password");
     static JButton testPass = new JButton("Test password");
     public static void creatingWindow() {
        JFrame window = new JFrame("Main menu");
@@ -36,25 +36,32 @@ public class SetUp {
         //Button placement
         buttonsConstraints.insets = new Insets(5, 0, 5, 0);
         mainConstraints.insets = new Insets(5, 0, 5, 0);
+
         buttonsConstraints.gridwidth = 2;
         buttonsConstraints.fill = GridBagConstraints.HORIZONTAL;
         buttonsConstraints.ipady = 20;
         buttonsConstraints.anchor = GridBagConstraints.CENTER;
+
         buttonsConstraints.gridy = 0;
         ButtonFuncs.addAct();
         buttonsLayout.add(addPass, buttonsConstraints);
-        ButtonFuncs.editAct();
+
+        ButtonFuncs.getAct();
         buttonsConstraints.gridy = 1;
-        buttonsLayout.add(editPass, buttonsConstraints);
-        ButtonFuncs.deleteAct();
+        buttonsLayout.add(getPass, buttonsConstraints);
+
+        ButtonFuncs.editAct();
         buttonsConstraints.gridy = 2;
-        buttonsLayout.add(delPass, buttonsConstraints);
-        ButtonFuncs.genAct();
+        buttonsLayout.add(editPass, buttonsConstraints);
+
+        ButtonFuncs.deleteAct();
         buttonsConstraints.gridy = 3;
-        buttonsLayout.add(genPass, buttonsConstraints);
+        buttonsLayout.add(delPass, buttonsConstraints);
+
         ButtonFuncs.testAct();
         buttonsConstraints.gridy = 4;
         buttonsLayout.add(testPass, buttonsConstraints);
+
         mainConstraints.gridy = 1;
         mainLayout.add(buttonsLayout, mainConstraints);
         window.add(mainLayout);
