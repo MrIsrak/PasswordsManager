@@ -4,7 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-
+import java.util.Arrays;
+import java.util.Base64;
 public class FileFuncs {
     public static void checkFile() throws IOException {
         File file = new File(Initialization.filePath);
@@ -16,7 +17,7 @@ public class FileFuncs {
     public static void writeFile(String pass, String email, String site) throws Exception {
         // Encrypt the password using the provided secret key and initialization vector.
         byte[] encPass = EncryptDecrypt.encrypt(pass, Initialization.secretKey, Initialization.ivParameterSpec);
-
+        String encPass64 = Base64.getEncoder().encodeToString(encPass);
         // Updating variables
         loadData(email);
 
@@ -44,7 +45,7 @@ public class FileFuncs {
             if (!isDuplicated) {
                 JSONObject newSite = new JSONObject();
                 newSite.put("siteName", site);
-                newSite.put("password", EncryptDecrypt.encrypt(pass, Initialization.secretKey, Initialization.ivParameterSpec));
+                newSite.put("password", encPass64);
                 Initialization.sites.put(newSite);
                 Initialization.userData.put("Initialization.sites", Initialization.sites);
             }
@@ -54,7 +55,7 @@ public class FileFuncs {
             Initialization.sites = new JSONArray();
             JSONObject newSite = new JSONObject();
             newSite.put("siteName", site);
-            newSite.put("password", EncryptDecrypt.encrypt(pass, Initialization.secretKey, Initialization.ivParameterSpec));
+            newSite.put("password", encPass64);
             Initialization.sites.put(newSite);
             Initialization.userData.put("Initialization.sites", Initialization.sites);
             Initialization.inventoryData.put(email, Initialization.userData);
@@ -70,7 +71,7 @@ public class FileFuncs {
     }
 
 
-    public static byte[] readFile(String email, String site) throws Exception {
+    public static void readFile(String email, String site) throws Exception {
         loadData(email);
         byte[] resPass = {};
         if (Initialization.inventoryData != null && Initialization.inventoryData.has(email)) {
@@ -81,15 +82,25 @@ public class FileFuncs {
             if (sites != null) {
                 for (int i = 0; i < sites.length(); i++) {
                     JSONObject siteData = sites.getJSONObject(i);
-                    // Match the site name
-                    Object passwordObj = siteData.get("password");
-                    if (passwordObj instanceof JSONObject) {
-                        byte[] passwordBytes = jsonObjectToByteArray((JSONObject) passwordObj);
-                        resPass = EncryptDecrypt.decrypt(passwordBytes, Initialization.secretKey, Initialization.ivParameterSpec);
-                    } else if (passwordObj instanceof JSONArray) {
-                        // Handle case where password is incorrectly stored as an array
-                        // Log an error or fix the structure here
-                        System.out.println("Error: Password is stored as JSONArray, not JSONObject");
+                    if (siteData.getString("siteName").equals(site)) {
+                        // Retrieve the password stored as JSONArray
+                        String passwordString = siteData.optString("password");
+                        System.out.println(passwordString);
+
+                        byte[] passwordBytes = passwordString.getBytes();
+                        System.out.println(Arrays.toString(passwordBytes));
+                        // Decrypt the password
+                        byte[] decryptedBytes = EncryptDecrypt.decrypt(passwordBytes, Initialization.secretKey, Initialization.ivParameterSpec);
+                        // Debug: Print the decrypted byte array
+                        System.out.println("Decrypted Bytes: " + Arrays.toString(decryptedBytes));
+
+                        // Convert to string
+                        String decryptedPassword = new String(decryptedBytes, StandardCharsets.UTF_8);
+
+
+                        // Print the decrypted password
+                        System.out.println("Decrypted Password: " + decryptedPassword);
+                        break;
                     } else {
                         System.out.println("Error: Unexpected data type for password");
                     }
@@ -99,7 +110,6 @@ public class FileFuncs {
             System.out.println("User data or email not found.");
         }
 
-        return resPass;
     }
     private static String loadJsonData(String filename) throws IOException {
         try (FileInputStream fis = new FileInputStream(filename)) {
@@ -128,12 +138,5 @@ public class FileFuncs {
         // Attempt to retrieve user data associated with the given email from the inventory.
         Initialization.userData = Initialization.inventoryData.optJSONObject(email);
 
-    }
-    public static byte[] jsonObjectToByteArray(JSONObject jsonObject) {
-        // Step 1: Convert JSONObject to String
-        String jsonString = jsonObject.toString();
-
-        // Step 2: Convert the String to byte[] using UTF-8 encoding
-        return jsonString.getBytes(StandardCharsets.UTF_8);
     }
 }

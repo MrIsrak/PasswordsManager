@@ -36,7 +36,7 @@ public class ButtonFuncs extends Initialization{
         MainWindowSetUp.getPass.addActionListener(e -> {
             SingletonFrame genPassWindow = SingletonFrame.getInstance();
             Initialization.setUp(genPassWindow);
-            Initialization.removeButton(save);
+            
             String text = "Get password";
             genPassWindow.setTitle(text);
             Initialization.addText(text);
@@ -65,8 +65,7 @@ public class ButtonFuncs extends Initialization{
     public static void editAct() {
         MainWindowSetUp.editPass.addActionListener(e -> {
             SingletonFrame editPassWindow = SingletonFrame.getInstance();
-            editPassWindow.resetContent();
-            mainLayout.remove(save);
+            Initialization.setUp(editPassWindow);
             String text = "Edit password";
             editPassWindow.setTitle(text);
             Initialization.addText(text);
