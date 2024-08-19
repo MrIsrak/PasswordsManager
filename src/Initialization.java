@@ -1,11 +1,13 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.swing.*;
 import java.awt.*;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Initialization {
     static JPanel mainLayout = new JPanel(new GridBagLayout());
     static GridBagConstraints mainConstraints = new GridBagConstraints();
@@ -16,12 +18,17 @@ public class Initialization {
     static GridBagConstraints buttonsConstraints = new GridBagConstraints();
     static JButton save = new JButton("Save");
     static JButton get = new JButton("Get");
-    static final String filePath = "C:\\Users\\evgen\\IdeaProjects\\PasswordsManager\\passwords.json";
+
+    static ArrayList<JButton> buttonsArr = new ArrayList<>();
+    static int buttonsArrIndex;
+
+    static final String filePath = "passwords.json";
     /////////////////////////
     static JSONObject inventoryData;
     static JSONObject userData;
     static JSONArray sites;
     /////////////////////////
+
 
     static final SecretKey secretKey;
     static {
@@ -35,6 +42,7 @@ public class Initialization {
 
     public static void setUp(SingletonFrame window){
         window.resetContent();
+        removeButton(buttonsArr.get(buttonsArrIndex));
         buttonsConstraints.insets = new Insets(2, 0, 2, 0);
         buttonsConstraints.fill = GridBagConstraints.HORIZONTAL;
 
@@ -79,7 +87,11 @@ public class Initialization {
         constraints.gridx = 1;
         buttonsLayout.add(passwordField, constraints);
     }
-    //placement of "save" button
+    //placement and remover of buttons
+    static public void buttonsArraySetUp(){
+        buttonsArr.add(save);
+        buttonsArr.add(get);
+    }
     static public void placeButton(JButton button) {
         buttonsConstraints.gridx = 0;
         buttonsConstraints.gridy = 4;

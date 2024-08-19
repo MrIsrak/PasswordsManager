@@ -20,7 +20,7 @@ public class ButtonFuncs extends Initialization{
             Initialization.addLabelTextSiteField("Email: ", emailPassField, buttonsConstraints, 0, 2);
             Initialization.addLabelPasswordField("Pass: ", passwordField, buttonsConstraints, 0, 3);
             Initialization.placeButton(save);
-
+            Initialization.buttonsArrIndex = 0;
 
             save.addActionListener(e1 -> {
                 try {
@@ -47,6 +47,7 @@ public class ButtonFuncs extends Initialization{
             Initialization.addLabelTextSiteField("Email: ", emailPassField, buttonsConstraints, 0, 1);
             Initialization.addLabelTextSiteField("Site: ", sitePassField, buttonsConstraints, 0, 2);
             Initialization.placeButton(get);
+            Initialization.buttonsArrIndex = 1;
 
             get.addActionListener(e1 -> {
                 try{
