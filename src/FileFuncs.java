@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 public class FileFuncs {
@@ -17,7 +18,7 @@ public class FileFuncs {
     public static void writeFile(String pass, String email, String site) throws Exception {
         // Encrypt the password using the provided secret key and initialization vector.
         byte[] encPass = EncryptDecrypt.encrypt(pass, Initialization.secretKey, Initialization.ivParameterSpec);
-        String encPass64 = Base64.getEncoder().encodeToString(encPass);
+
         // Updating variables
         loadData(email);
 
@@ -45,7 +46,7 @@ public class FileFuncs {
             if (!isDuplicated) {
                 JSONObject newSite = new JSONObject();
                 newSite.put("siteName", site);
-                newSite.put("password", encPass64);
+                newSite.put("password", encPass);
                 Initialization.sites.put(newSite);
                 Initialization.userData.put("Initialization.sites", Initialization.sites);
             }
@@ -55,7 +56,7 @@ public class FileFuncs {
             Initialization.sites = new JSONArray();
             JSONObject newSite = new JSONObject();
             newSite.put("siteName", site);
-            newSite.put("password", encPass64);
+            newSite.put("password", encPass);
             Initialization.sites.put(newSite);
             Initialization.userData.put("Initialization.sites", Initialization.sites);
             Initialization.inventoryData.put(email, Initialization.userData);
@@ -87,17 +88,13 @@ public class FileFuncs {
                         String passwordString = siteData.optString("password");
                         System.out.println(passwordString);
 
-                        byte[] passwordBytes = passwordString.getBytes();
-                        System.out.println(Arrays.toString(passwordBytes));
-                        // Decrypt the password
-                        byte[] decryptedBytes = EncryptDecrypt.decrypt(passwordBytes, Initialization.secretKey, Initialization.ivParameterSpec);
-                        // Debug: Print the decrypted byte array
-                        System.out.println("Decrypted Bytes: " + Arrays.toString(decryptedBytes));
+                        System.out.println(Arrays.toString(manualStringToByte(passwordString)));
 
-                        // Convert to string
+                        byte[] decryptedBytes = EncryptDecrypt.decrypt(manualStringToByte(passwordString), Initialization.secretKey, Initialization.ivParameterSpec);
                         String decryptedPassword = new String(decryptedBytes, StandardCharsets.UTF_8);
 
-
+                        // Debug: Print the decrypted byte array
+                        System.out.println("Decrypted Bytes: " + Arrays.toString(decryptedBytes));
                         // Print the decrypted password
                         System.out.println("Decrypted Password: " + decryptedPassword);
                         break;
@@ -109,6 +106,33 @@ public class FileFuncs {
         } else {
             System.out.println("User data or email not found.");
         }
+
+    }
+
+    private static byte[] manualStringToByte(String encPassString){
+        ArrayList<Byte> encPassList = new ArrayList<>();
+        StringBuilder temp = new StringBuilder();
+
+        for (int i = 1; i < encPassString.length(); i++) {
+            if (encPassString.charAt(i) != ',' && encPassString.charAt(i) != ']') {
+                temp.append(encPassString.charAt(i));
+            } else {
+                try {
+                    byte b = Byte.parseByte(temp.toString());
+                    encPassList.add(b);
+                    temp = new StringBuilder();
+                } catch (NumberFormatException e) {
+                    // Handle invalid number format
+                    System.err.println("Invalid number: " + temp);
+                }
+            }
+        }
+        // Convert ArrayList to byte array
+        byte[] encPassByte = new byte[encPassList.size()];
+        for (int i = 0; i < encPassList.size(); i++) {
+            encPassByte[i] = encPassList.get(i);
+        }
+        return encPassByte;
 
     }
     private static String loadJsonData(String filename) throws IOException {
@@ -137,6 +161,5 @@ public class FileFuncs {
 
         // Attempt to retrieve user data associated with the given email from the inventory.
         Initialization.userData = Initialization.inventoryData.optJSONObject(email);
-
     }
 }
