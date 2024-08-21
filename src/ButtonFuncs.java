@@ -21,10 +21,10 @@ public class ButtonFuncs extends Initialization{
             Initialization.addLabelPasswordField("Pass: ", passwordField, buttonsConstraints, 0, 3);
             Initialization.placeButton(save);
             Initialization.buttonsArrIndex = 0;
-
             save.addActionListener(e1 -> {
                 try {
                     FileFuncs.checkFile();
+
                     FileFuncs.writeFile(passwordField.getText(), emailPassField.getText(), sitePassField.getText());
                 } catch (Exception ex) {System.err.println("Error during encryption/decryption: " + ex.getMessage());}
             });

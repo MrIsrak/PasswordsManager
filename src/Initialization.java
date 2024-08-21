@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Initialization {
     static JPanel mainLayout = new JPanel(new GridBagLayout());
@@ -23,22 +22,14 @@ public class Initialization {
     static int buttonsArrIndex;
 
     static final String filePath = "passwords.json";
+    static final String propertiesPath = "application.properties";
     /////////////////////////
     static JSONObject inventoryData;
     static JSONObject userData;
     static JSONArray sites;
     /////////////////////////
-
-
-    static final SecretKey secretKey;
-    static {
-        try {
-            secretKey = EncryptDecrypt.generateKey();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    static final IvParameterSpec ivParameterSpec = EncryptDecrypt.generateIv();
+    static SecretKey secretKey;
+    static IvParameterSpec ivParameterSpec;
 
     public static void setUp(SingletonFrame window){
         window.resetContent();
