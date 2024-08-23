@@ -34,11 +34,11 @@ public class ButtonFuncs extends Initialization{
     }
     public static void getAct() {
         MainWindowSetUp.getPass.addActionListener(e -> {
-            SingletonFrame genPassWindow = SingletonFrame.getInstance();
-            Initialization.setUp(genPassWindow);
+            SingletonFrame getPassWindow = SingletonFrame.getInstance();
+            Initialization.setUp(getPassWindow);
             
             String text = "Get password";
-            genPassWindow.setTitle(text);
+            getPassWindow.setTitle(text);
             Initialization.addText(text);
 
             JTextField sitePassField = new JTextField(10);
@@ -53,6 +53,7 @@ public class ButtonFuncs extends Initialization{
                 try{
                     FileFuncs.checkFile();
                     FileFuncs.readFile(emailPassField.getText(), sitePassField.getText());
+//                    DisplayingText.displayPass(getPassWindow);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -60,7 +61,7 @@ public class ButtonFuncs extends Initialization{
 
             mainConstraints.gridy=2;
             mainLayout.add(buttonsLayout, mainConstraints);
-            genPassWindow.add(mainLayout);
+            getPassWindow.add(mainLayout);
         });
     }
     public static void editAct() {

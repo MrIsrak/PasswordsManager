@@ -17,10 +17,10 @@ public class Initialization {
     static GridBagConstraints buttonsConstraints = new GridBagConstraints();
     static JButton save = new JButton("Save");
     static JButton get = new JButton("Get");
-
+    /////////////////////////
     static ArrayList<JButton> buttonsArr = new ArrayList<>();
     static int buttonsArrIndex;
-
+    /////////////////////////
     static final String filePath = "passwords.json";
     static final String propertiesPath = "application.properties";
     /////////////////////////
@@ -30,6 +30,8 @@ public class Initialization {
     /////////////////////////
     static SecretKey secretKey;
     static IvParameterSpec ivParameterSpec;
+    /////////////////////////
+    static String decryptedPassword;
 
     public static void setUp(SingletonFrame window){
         window.resetContent();

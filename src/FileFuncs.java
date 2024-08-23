@@ -2,7 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -92,7 +91,9 @@ public class FileFuncs {
                 if (Initialization.sites.getJSONObject(i).getString("siteName").equals(site)) {
                     isDuplicated = true;
                     // Print a message and break the loop if a duplicate site is found.
-                    System.out.println("Duplicate site found for email: " + email);
+                    DisplayingText.outPutText.setText("Duplicate site found for email: " + email);
+                    DisplayingText.displayText(false);
+//                    System.out.println("Duplicate site found for email: " + email);
                     break;
                 }
             }
@@ -121,9 +122,10 @@ public class FileFuncs {
         FileWriter writer = new FileWriter(Initialization.filePath);
         writer.write(Initialization.inventoryData.toString());
         writer.close();
-
         // Print a confirmation message indicating the inventory was updated.
-        System.out.println("Inventory updated for email: " + email);
+        DisplayingText.outPutText.setText("Inventory updated for email:" + email);
+        DisplayingText.displayText(false);
+//        System.out.println("Inventory updated for email: " + email);
     }
 
 
@@ -133,7 +135,6 @@ public class FileFuncs {
         if (Initialization.inventoryData != null && Initialization.inventoryData.has(email)) {
             // Retrieve the user's data associated with the email
             JSONArray sites = Initialization.userData.optJSONArray("sites");
-//            System.out.println(sites);
             // Check if the sites array is not null
             if (sites != null) {
                 for (int i = 0; i < sites.length(); i++) {
@@ -142,17 +143,26 @@ public class FileFuncs {
                         // Retrieve the password stored as JSONArray
                         String passwordString = siteData.optString("password");
                         byte[] decryptedBytes = EncryptDecrypt.decrypt(manualStringToByte(passwordString), Initialization.secretKey, Initialization.ivParameterSpec);
-                        String decryptedPassword = new String(decryptedBytes, StandardCharsets.UTF_8);
-                        System.out.println("Decrypted Password: " + decryptedPassword);
+                        Initialization.decryptedPassword = new String(decryptedBytes, StandardCharsets.UTF_8);
+                        DisplayingText.displayText(true);
+                        System.out.println("Decrypted Password: " + Initialization.decryptedPassword);
                         break;
                     } else {
-                        System.out.println("Error: Unexpected data type for password");
+                        DisplayingText.outPutText.setText("Unexpected data type for password");
+                        DisplayingText.displayText(false);
+//                        System.out.println("Error: Unexpected data type for password");
                     }
                 }
             }
-            else {System.out.println("site is null");}
+            else {
+                DisplayingText.outPutText.setText("site is null");
+                DisplayingText.displayText(false);
+//                System.out.println();
+            }
         } else {
-            System.out.println("User data or email not found.");
+            DisplayingText.outPutText.setText("User data or email not found.");
+            DisplayingText.displayText(false);
+//            System.out.println();
         }
     }
     private static byte[] manualStringToByte(String encPassString){
