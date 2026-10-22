@@ -145,7 +145,6 @@ public class FileFuncs {
                         byte[] decryptedBytes = EncryptDecrypt.decrypt(manualStringToByte(passwordString), Initialization.secretKey, Initialization.ivParameterSpec);
                         Initialization.decryptedPassword = new String(decryptedBytes, StandardCharsets.UTF_8);
                         DisplayingText.displayText(true);
-                        System.out.println("Decrypted Password: " + Initialization.decryptedPassword);
                         break;
                     } else {
                         DisplayingText.outPutText.setText("Unexpected data type for password");
